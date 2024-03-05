@@ -1,6 +1,6 @@
 {*******************************************************************************}
 {                                                                               }
-{ Projeto: ExemploUploadFotoHorse - HorseAndRESTRequest4Delphi                  }
+{ Projeto: ExemploUploadArquivoHorse - HorseAndRESTRequest4Delphi               }
 {                                                                               }
 {*******************************************************************************}
 {                                                                               }
@@ -11,28 +11,30 @@
 
 
 
-unit interfaces.foto;
+unit interfaces.arquivo;
 
 interface
 
 uses
   Horse,
-  VCL.Graphics;
+  Data.DB,
+  FireDAC.Comp.Client;
 
 type
-  iFoto = interface
-    function id (Value : Integer) : iFoto; overload;
+  iArquivo = interface
+    function id (Value : Integer) : iArquivo; overload;
     function id : Integer; overload;
 
-    function nome (Value : String) : iFoto; overload;
+    function nome (Value : String) : iArquivo; overload;
     function nome : String; overload;
 
-    function foto (Value : TBitmap   {oid}) : iFoto; overload;
-    function foto : TBitmap   {oid}; overload;
+    function arquivo (Value : String) : iArquivo; overload;
+    function arquivo : String; overload;
 
-    function Insert(out erro : String) : iFoto; overload;
+    function Insert(out erro : String) : iArquivo; overload;
+    function Select(out erro : string) : TFDquery; overload;
 
-    function &End : iFoto;
+    function &End : iArquivo;
 
   end;
 

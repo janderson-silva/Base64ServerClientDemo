@@ -3,10 +3,10 @@
         <ProjectGuid>{9330A364-078A-4D5C-9F5F-6DA6ED32295C}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="App\AppUploadFoto.dproj">
+        <Projects Include="App\AppUploadArquivo.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Server\ServerUploadFoto.dproj">
+        <Projects Include="Server\ServerUploadArquivo.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,32 +17,32 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="AppUploadFoto">
-        <MSBuild Projects="App\AppUploadFoto.dproj"/>
+    <Target Name="AppUploadArquivo">
+        <MSBuild Projects="App\AppUploadArquivo.dproj"/>
     </Target>
-    <Target Name="AppUploadFoto:Clean">
-        <MSBuild Projects="App\AppUploadFoto.dproj" Targets="Clean"/>
+    <Target Name="AppUploadArquivo:Clean">
+        <MSBuild Projects="App\AppUploadArquivo.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="AppUploadFoto:Make">
-        <MSBuild Projects="App\AppUploadFoto.dproj" Targets="Make"/>
+    <Target Name="AppUploadArquivo:Make">
+        <MSBuild Projects="App\AppUploadArquivo.dproj" Targets="Make"/>
     </Target>
-    <Target Name="ServerUploadFoto">
-        <MSBuild Projects="Server\ServerUploadFoto.dproj"/>
+    <Target Name="ServerUploadArquivo">
+        <MSBuild Projects="Server\ServerUploadArquivo.dproj"/>
     </Target>
-    <Target Name="ServerUploadFoto:Clean">
-        <MSBuild Projects="Server\ServerUploadFoto.dproj" Targets="Clean"/>
+    <Target Name="ServerUploadArquivo:Clean">
+        <MSBuild Projects="Server\ServerUploadArquivo.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="ServerUploadFoto:Make">
-        <MSBuild Projects="Server\ServerUploadFoto.dproj" Targets="Make"/>
+    <Target Name="ServerUploadArquivo:Make">
+        <MSBuild Projects="Server\ServerUploadArquivo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="AppUploadFoto;ServerUploadFoto"/>
+        <CallTarget Targets="AppUploadArquivo;ServerUploadArquivo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="AppUploadFoto:Clean;ServerUploadFoto:Clean"/>
+        <CallTarget Targets="AppUploadArquivo:Clean;ServerUploadArquivo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="AppUploadFoto:Make;ServerUploadFoto:Make"/>
+        <CallTarget Targets="AppUploadArquivo:Make;ServerUploadArquivo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -1,6 +1,6 @@
 {*******************************************************************************}
 {                                                                               }
-{ Projeto: ExemploUploadFotoHorse - HorseAndRESTRequest4Delphi                  }
+{ Projeto: ExemploUploadArquivoHorse - HorseAndRESTRequest4Delphi               }
 {                                                                               }
 {*******************************************************************************}
 {                                                                               }
@@ -11,7 +11,7 @@
 
 
 
-unit unt.model.foto;
+unit unt.model.arquivo;
 
 interface
 
@@ -20,68 +20,69 @@ uses
   System.SysUtils,
   Vcl.Forms,
   Winapi.Windows,
-  unt.interfaces.foto;
+  unt.interfaces.arquivo;
 
 type
-  TFoto = class(TInterfacedObject, iFoto)
+  TArquivo = class(TInterfacedObject, iArquivo)
     private
       Fid : Integer;
       Fnome : string;
-      Ffoto : string;
+      FArquivo : string;
     public
       constructor Create;
       destructor Destroy; override;
-      class function New : iFoto;
+      class function New : iArquivo;
 
-      function id (Value : Integer) : iFoto; overload;
+      function id (Value : Integer) : iArquivo; overload;
       function id : Integer; overload;
 
-      function nome (Value : String) : iFoto; overload;
+      function nome (Value : String) : iArquivo; overload;
       function nome : String; overload;
 
-      function foto (Value : string) : iFoto; overload;
-      function foto : string; overload;
+      function arquivo (Value : string) : iArquivo; overload;
+      function arquivo : string; overload;
 
-      function Insert : iFoto; overload;
+      function Insert : iArquivo; overload;
+      function Select : String; overload;
 
-      function &End : iFoto;
+      function &End : iArquivo;
 
   end;
 
 implementation
 
-{ TEmpresa_foto }
+{ TArquivo }
 
-constructor TFoto.Create;
+constructor TArquivo.Create;
 begin
 
 end;
 
-destructor TFoto.Destroy;
+destructor TArquivo.Destroy;
 begin
 
 end;
 
-class function TFoto.New: iFoto;
+class function TArquivo.New: iArquivo;
 begin
   Result := Self.Create;
 end;
 
-function TFoto.&End: iFoto;
+function TArquivo.&End: iArquivo;
 begin
   Result := Self;
 end;
 
-function TFoto.Insert: iFoto;
+function TArquivo.Insert: iArquivo;
 var
   Resp : IResponse;
 begin
   Resp := TRequest.New.BaseURL('http://localhost:9000/v1/')
-              .Resource('foto')
+              .Resource('arquivo')
               .Accept('application/json')
               .AddBody('{'+
                        '"nome":"'+nome+'",'+
-                       '"foto":"'+foto+'"'+
+                       '"arquivo":"'+arquivo+'"'+
                        '}')
             .Post;
 
@@ -91,37 +92,52 @@ begin
     Application.MessageBox(PChar('Cadastrado com sucesso!'),'Atenção',MB_OK+MB_ICONINFORMATION);
 end;
 
-function TFoto.id (Value : Integer) : iFoto;
+function TArquivo.Select: String;
+var
+  Resp : IResponse;
+begin
+  Resp := TRequest.New.BaseURL('http://localhost:9000/v1/')
+              .Resource('arquivo')
+              .Accept('application/json')
+            .Get;
+
+  if Resp.StatusCode <> 200 then
+    raise Exception.Create('Status Code: #' + Resp.StatusCode.ToString + #13+#13 + Resp.Content )
+  else
+    Result := Resp.Content;
+end;
+
+function TArquivo.id (Value : Integer) : iArquivo;
 begin
   Result := Self;
   Fid := Value;
 end;
 
-function TFoto.id : Integer;
+function TArquivo.id : Integer;
 begin
   Result := Fid;
 end;
 
-function TFoto.nome (Value : string) : iFoto;
+function TArquivo.nome (Value : string) : iArquivo;
 begin
   Result := Self;
   Fnome := Value;
 end;
 
-function TFoto.nome : string;
+function TArquivo.nome : string;
 begin
   Result := Fnome;
 end;
 
-function TFoto.foto (Value : string) : iFoto;
+function TArquivo.arquivo (Value : string) : iArquivo;
 begin
   Result := Self;
-  Ffoto := Value;
+  FArquivo := Value;
 end;
 
-function TFoto.foto : string;
+function TArquivo.arquivo : string;
 begin
-  Result := Ffoto;
+  Result := FArquivo;
 end;
 
 end.

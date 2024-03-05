@@ -1,6 +1,6 @@
 {*******************************************************************************}
 {                                                                               }
-{ Projeto: ExemploUploadFotoHorse - HorseAndRESTRequest4Delphi                  }
+{ Projeto: ExemploUploadArquivoHorse - HorseAndRESTRequest4Delphi               }
 {                                                                               }
 {*******************************************************************************}
 {                                                                               }
@@ -11,7 +11,7 @@
 
 
 
-unit model.foto;
+unit model.arquivo;
 
 interface
 
@@ -20,61 +20,61 @@ uses
   Data.DB,
   FireDAC.Comp.Client,
   System.SysUtils,
-  VCL.Graphics,
-  interfaces.foto,
+  interfaces.arquivo,
   model.connection;
 
 type
-  TFoto = class(TInterfacedObject, iFoto)
+  TArquivo = class(TInterfacedObject, iArquivo)
     private
       Fid : Integer;
       Fnome : string;
-      Ffoto : TBitmap   {oid};
+      Farquivo : String;
     public
       constructor Create;
       destructor Destroy; override;
-      class function New : iFoto;
+      class function New : iArquivo;
 
-      function id (Value : Integer) : iFoto; overload;
+      function id (Value : Integer) : iArquivo; overload;
       function id : Integer; overload;
 
-      function nome (Value : String) : iFoto; overload;
+      function nome (Value : String) : iArquivo; overload;
       function nome : String; overload;
 
-      function foto (Value : TBitmap   {oid}) : iFoto; overload;
-      function foto : TBitmap   {oid}; overload;
+      function arquivo (Value : String) : iArquivo; overload;
+      function arquivo : String; overload;
 
-      function Insert(out erro : String) : iFoto; overload;
+      function Insert(out erro : String) : iArquivo; overload;
+      function Select(out erro : string) : TFDquery; overload;
 
-      function &End : iFoto;
+      function &End : iArquivo;
 
   end;
 
 implementation
 
-{ TFoto }
+{ TArquivo }
 
-constructor TFoto.Create;
+constructor TArquivo.Create;
 begin
   model.connection.Connect;
 end;
 
-destructor TFoto.Destroy;
+destructor TArquivo.Destroy;
 begin
   model.connection.Disconect;
 end;
 
-class function TFoto.New: iFoto;
+class function TArquivo.New: iArquivo;
 begin
   Result := Self.Create;
 end;
 
-function TFoto.&End: iFoto;
+function TArquivo.&End: iArquivo;
 begin
   Result := Self;
 end;
 
-function TFoto.Insert(out erro: String): iFoto;
+function TArquivo.Insert(out erro: String): iArquivo;
 var
   qry : TFDQuery;
 begin
@@ -83,56 +83,77 @@ begin
     qry.Connection := Model.Connection.FConnection;
     qry.Active := False;
     qry.sql.Clear;
-    qry.sql.Add('insert into foto(');
+    qry.sql.Add('insert into arquivo(');
     qry.SQL.Add('    nome,');
-    qry.SQL.Add('    foto');
+    qry.SQL.Add('    arquivo');
     qry.SQL.Add(') values (');
     qry.SQL.Add('    :nome,');
-    qry.SQL.Add('    :foto');
+    qry.SQL.Add('    :arquivo');
     qry.SQL.Add(')');
     qry.ParamByName('nome').Value := Fnome;
-    qry.ParamByName('foto').Assign(Ffoto);
+    qry.ParamByName('arquivo').Value := Farquivo;
     qry.ExecSQL;
     qry.Free;
     erro := '';
   except on ex:exception do
     begin
-      erro := 'Erro ao inserir Foto: ' + ex.Message;
+      erro := 'Erro ao inserir Arquivo: ' + ex.Message;
     end;
   end;
 end;
 
-function TFoto.id (Value : Integer) : iFoto;
+function TArquivo.Select(out erro : string) : TFDquery;
+var
+  qry : TFDQuery;
+begin
+  try
+    qry := TFDQuery.Create(nil);
+    qry.Connection := Model.Connection.FConnection;
+    qry.Active := False;
+    qry.sql.Clear;
+    qry.sql.Add('select first 1 * from arquivo');
+    qry.Active := True;
+    erro := '';
+    Result := qry;
+  except on ex:exception do
+    begin
+      erro := 'Erro ao consultar Arquivo: ' + ex.Message;
+      Result := nil;
+    end;
+  end;
+end;
+
+function TArquivo.id (Value : Integer) : iArquivo;
 begin
   Result := Self;
   Fid := Value;
 end;
 
-function TFoto.id : Integer;
+function TArquivo.id : Integer;
 begin
   Result := Fid;
 end;
 
-function TFoto.nome (Value : string) : iFoto;
+function TArquivo.nome (Value : string) : iArquivo;
 begin
   Result := Self;
   Fnome := Value;
 end;
 
-function TFoto.nome : string;
+function TArquivo.nome : string;
 begin
   Result := Fnome;
 end;
 
-function TFoto.foto (Value : TBitmap   {oid}) : iFoto;
+function TArquivo.arquivo (Value : string) : iArquivo;
 begin
   Result := Self;
-  Ffoto := Value;
+  Farquivo := Value;
 end;
 
-function TFoto.foto : TBitmap   {oid};
+function TArquivo.arquivo : string;
 begin
-  Result := Ffoto;
+  Result := Farquivo;
 end;
 
 end.

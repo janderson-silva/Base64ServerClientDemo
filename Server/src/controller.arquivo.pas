@@ -1,6 +1,6 @@
 {*******************************************************************************}
 {                                                                               }
-{ Projeto: ExemploUploadFotoHorse - HorseAndRESTRequest4Delphi                  }
+{ Projeto: ExemploUploadArquivoHorse - HorseAndRESTRequest4Delphi               }
 {                                                                               }
 {*******************************************************************************}
 {                                                                               }
@@ -11,59 +11,36 @@
 
 
 
-unit controller.foto;
+unit controller.arquivo;
 
 interface
 
 uses
   Horse,
+  Data.DB,
+  DataSet.Serialize,
+  FireDAC.Comp.Client,
   Soap.EncdDecd,
   System.Classes,
   System.JSON,
   System.SysUtils,
   VCL.Graphics,
-  interfaces.foto,
-  model.foto;
+  interfaces.arquivo,
+  model.arquivo;
 
 procedure Registry;
 
 implementation
 
-function BitmapFromBase64(const base64: string): TBitmap;
+procedure InsertArquivo(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
-  Input: TStringStream;
-  Output: TBytesStream;
-begin
-  Input := TStringStream.Create(base64, TEncoding.ASCII);
-  try
-    Output := TBytesStream.Create;
-    try
-      Soap.EncdDecd.DecodeStream(Input, Output);
-      Output.Position := 0;
-      Result := TBitmap.Create;
-      try
-        Result.LoadFromStream(Output);
-      except
-        Result.Free;
-        raise;
-      end;
-    finally
-      Output.Free;
-    end;
-  finally
-    Input.Free;
-  end;
-end;
-
-procedure InsertFoto(Req: THorseRequest; Res: THorseResponse; Next: TProc);
-var
-  Ffoto : ifoto;
-  erro, foto64 : string;
+  Farquivo : iArquivo;
+  erro : string;
   body  : TJsonValue;
 begin
   // Conexao com o banco...
   try
-    Ffoto := Tfoto.New;
+    Farquivo := TArquivo.New;
   except
     res.Send('{ "Erro": "Erro ao conectar com o banco" }').Status(500);
     exit;
@@ -71,12 +48,9 @@ begin
 
   try
     body := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(req.Body), 0) as TJsonValue;
-
-    foto64 := body.GetValue<string>('foto','');
-
-    Ffoto
+    Farquivo
         .nome(body.GetValue<string>('nome',''))
-        .foto(BitmapFromBase64(foto64))
+        .arquivo(body.GetValue<string>('arquivo',''))
       .Insert(erro);
 
     body.Free;
@@ -92,10 +66,56 @@ begin
   end;
 end;
 
+procedure SelectArquivo(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  Farquivo : iArquivo;
+  qry : TFDQuery;
+  erro : string;
+  ObjArquivo : TJSONObject;
+begin
+  // Conexao com o banco...
+  try
+    Farquivo := TArquivo.New;
+  except
+    res.Send('{ "Erro": "Erro ao conectar com o banco" }').Status(500);
+    exit;
+  end;
+
+  try
+    try
+      qry := Farquivo
+                .Select(erro);
+
+      if erro <> '' then
+        raise Exception.Create(erro)
+      else
+      begin
+        if qry.RecordCount > 0 then
+        begin
+          ObjArquivo := qry.ToJSONObject;
+          res.Send<TJSONObject>(ObjArquivo).Status(200);
+        end
+        else
+        begin
+          res.Send('{ "Erro": "Nenhum cadastro de pessoa_anexo encontrado" }').Status(404);
+        end;
+      end;
+    except on E : Exception do
+      begin
+        res.Send('{ "erro": "'+E.Message+'" }').Status(400);
+        Exit;
+      end;
+    end;
+  finally
+    qry.Free;
+  end;
+end;
+
 procedure Registry;
 begin
     THorse.Group.Prefix('v1')
-      .Post('/foto', InsertFoto);
+      .Post('/arquivo', InsertArquivo)
+      .Get('/arquivo', SelecTArquivo);
 end;
 
 end.

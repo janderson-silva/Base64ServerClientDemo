@@ -1,6 +1,6 @@
 {*******************************************************************************}
 {                                                                               }
-{ Projeto: ExemploUploadFotoHorse - HorseAndRESTRequest4Delphi                  }
+{ Projeto: ExemploUploadArquivoHorse - HorseAndRESTRequest4Delphi               }
 {                                                                               }
 {*******************************************************************************}
 {                                                                               }
@@ -62,7 +62,7 @@ var
 begin
   try
     try
-      ArqIni := GetCurrentDir + '\ServerUploadFoto.ini';
+      ArqIni := GetCurrentDir + '\ServerUploadArquivo.ini';
 
       // Verifica se INI existe...
       if not FileExists(ArqIni) then
@@ -78,7 +78,7 @@ begin
 
       // Buscar dados da conexão...
       FConn.Params.Values['DriverID'] := ini.ReadString('Database', 'DriverID', 'FB');
-      FConn.Params.Values['Database'] := ini.ReadString('Database', 'Database', GetCurrentDir + '\UPLOADFOTO.FDB');
+      FConn.Params.Values['Database'] := ini.ReadString('Database', 'Database', GetCurrentDir + '\UPLOADARQUIVO.FDB');
       FConn.Params.Values['User_name'] := ini.ReadString('Database', 'User_name', 'sysdba');
       FConn.Params.Values['Password'] := ini.ReadString('Database', 'Password', 'masterkey');
       FConn.Params.Values['Port'] := ini.ReadString('Database', 'Port', '3050');

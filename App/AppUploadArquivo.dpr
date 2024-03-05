@@ -1,10 +1,10 @@
-program AppUploadFoto;
+program AppUploadArquivo;
 
 uses
   Vcl.Forms,
   untPrincipal in 'src\untPrincipal.pas' {frmPrincipal},
-  unt.interfaces.foto in 'src\unt.interfaces.foto.pas',
-  unt.model.foto in 'src\unt.model.foto.pas';
+  unt.interfaces.arquivo in 'src\unt.interfaces.arquivo.pas',
+  unt.model.arquivo in 'src\unt.model.arquivo.pas';
 
 {$R *.res}
 
