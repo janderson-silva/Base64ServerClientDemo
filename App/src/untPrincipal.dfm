@@ -3,8 +3,8 @@ object frmPrincipal: TfrmPrincipal
   Top = 0
   BorderIcons = [biSystemMenu]
   Caption = 'Enviar Arquivo'
-  ClientHeight = 438
-  ClientWidth = 1064
+  ClientHeight = 361
+  ClientWidth = 784
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,17 +15,16 @@ object frmPrincipal: TfrmPrincipal
   object Panel3: TPanel
     Left = 0
     Top = 0
-    Width = 1064
+    Width = 784
     Height = 41
     Align = alTop
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 0
-    ExplicitLeft = -3
-    ExplicitTop = -3
+    ExplicitWidth = 1064
     object pnlListarArquivos: TPanel
       AlignWithMargins = True
-      Left = 665
+      Left = 385
       Top = 3
       Width = 120
       Height = 35
@@ -44,7 +43,7 @@ object frmPrincipal: TfrmPrincipal
       TabOrder = 0
       StyleElements = []
       OnClick = pnlListarArquivosClick
-      ExplicitLeft = 941
+      ExplicitLeft = 665
     end
     object pnlEnviarArquivo: TPanel
       AlignWithMargins = True
@@ -70,7 +69,7 @@ object frmPrincipal: TfrmPrincipal
     end
     object pnlNFCe: TPanel
       AlignWithMargins = True
-      Left = 791
+      Left = 511
       Top = 3
       Width = 270
       Height = 35
@@ -89,15 +88,15 @@ object frmPrincipal: TfrmPrincipal
       TabOrder = 2
       StyleElements = []
       OnClick = pnlNFCeClick
-      ExplicitLeft = 801
+      ExplicitLeft = 791
     end
   end
   object DBGrid1: TDBGrid
     AlignWithMargins = True
     Left = 3
     Top = 91
-    Width = 1058
-    Height = 344
+    Width = 778
+    Height = 267
     Align = alClient
     DataSource = DataSource1
     DrawingStyle = gdsClassic
@@ -112,7 +111,7 @@ object frmPrincipal: TfrmPrincipal
     AlignWithMargins = True
     Left = 3
     Top = 44
-    Width = 1058
+    Width = 778
     Height = 41
     Align = alTop
     BevelInner = bvLowered
@@ -128,7 +127,7 @@ object frmPrincipal: TfrmPrincipal
     ParentBackground = False
     ParentFont = False
     TabOrder = 2
-    ExplicitTop = 394
+    ExplicitWidth = 1058
   end
   object FDMemTable1: TFDMemTable
     FieldDefs = <>
