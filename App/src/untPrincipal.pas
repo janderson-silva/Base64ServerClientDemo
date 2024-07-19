@@ -33,14 +33,14 @@ type
     FDMemTable1: TFDMemTable;
     DataSource1: TDataSource;
     OpenDialog1: TOpenDialog;
-    pnlNFCe: TPanel;
+    pnlConverter: TPanel;
     FDMemTable1id: TIntegerField;
     FDMemTable1nome: TStringField;
     FDMemTable1arquivo: TWideMemoField;
     Panel1: TPanel;
     procedure pnlListarArquivosClick(Sender: TObject);
     procedure pnlEnviarArquivoClick(Sender: TObject);
-    procedure pnlNFCeClick(Sender: TObject);
+    procedure pnlConverterClick(Sender: TObject);
   private
     function ConvertFileToBase64(AInFileName: string): String;
     procedure ConvertBase64ToFile(const Base64Text: string; const FileName: string);
@@ -149,7 +149,7 @@ begin
   end;
 end;
 
-procedure TfrmPrincipal.pnlNFCeClick(Sender: TObject);
+procedure TfrmPrincipal.pnlConverterClick(Sender: TObject);
 var
   lPathApp,
   lPathAppSub : string;

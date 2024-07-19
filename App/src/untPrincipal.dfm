@@ -21,7 +21,6 @@ object frmPrincipal: TfrmPrincipal
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 1064
     object pnlListarArquivos: TPanel
       AlignWithMargins = True
       Left = 385
@@ -43,7 +42,6 @@ object frmPrincipal: TfrmPrincipal
       TabOrder = 0
       StyleElements = []
       OnClick = pnlListarArquivosClick
-      ExplicitLeft = 665
     end
     object pnlEnviarArquivo: TPanel
       AlignWithMargins = True
@@ -67,7 +65,7 @@ object frmPrincipal: TfrmPrincipal
       StyleElements = []
       OnClick = pnlEnviarArquivoClick
     end
-    object pnlNFCe: TPanel
+    object pnlConverter: TPanel
       AlignWithMargins = True
       Left = 511
       Top = 3
@@ -87,8 +85,7 @@ object frmPrincipal: TfrmPrincipal
       ParentFont = False
       TabOrder = 2
       StyleElements = []
-      OnClick = pnlNFCeClick
-      ExplicitLeft = 791
+      OnClick = pnlConverterClick
     end
   end
   object DBGrid1: TDBGrid
@@ -127,7 +124,6 @@ object frmPrincipal: TfrmPrincipal
     ParentBackground = False
     ParentFont = False
     TabOrder = 2
-    ExplicitWidth = 1058
   end
   object FDMemTable1: TFDMemTable
     FieldDefs = <>
