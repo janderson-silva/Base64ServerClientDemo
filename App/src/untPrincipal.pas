@@ -21,24 +21,29 @@ uses
   unt.interfaces.arquivo,
   unt.model.arquivo, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
-  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, DataSet.Serialize;
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, DataSet.Serialize,
+  Vcl.Grids, Vcl.DBGrids;
 
 type
   TfrmPrincipal = class(TForm)
-    Panel1: TPanel;
     Panel3: TPanel;
-    btnEnviar: TButton;
-    Panel4: TPanel;
-    Panel6: TPanel;
-    btnReceber: TButton;
+    pnlListarArquivos: TPanel;
+    pnlEnviarArquivo: TPanel;
+    DBGrid1: TDBGrid;
     FDMemTable1: TFDMemTable;
-    Memo1: TMemo;
-    Memo2: TMemo;
-    procedure btnEnviarClick(Sender: TObject);
-    procedure btnReceberClick(Sender: TObject);
+    DataSource1: TDataSource;
+    OpenDialog1: TOpenDialog;
+    pnlNFCe: TPanel;
+    FDMemTable1id: TIntegerField;
+    FDMemTable1nome: TStringField;
+    FDMemTable1arquivo: TWideMemoField;
+    Panel1: TPanel;
+    procedure pnlListarArquivosClick(Sender: TObject);
+    procedure pnlEnviarArquivoClick(Sender: TObject);
+    procedure pnlNFCeClick(Sender: TObject);
   private
     function ConvertFileToBase64(AInFileName: string): String;
-    function ConvertBase64ToFile(Base64, FileName: string): String;
+    procedure ConvertBase64ToFile(const Base64Text: string; const FileName: string);
     { Private declarations }
   public
     { Public declarations }
@@ -78,80 +83,56 @@ begin
   end;
 end;
 
-function TfrmPrincipal.ConvertBase64ToFile(Base64, FileName: string) : String;
+procedure TfrmPrincipal.ConvertBase64ToFile(const Base64Text: string; const FileName: string);
 var
-  inStream    : TStream;
-  outStream   : TStream;
-
-  DirFileInStream   : String;
-  DirFileOutStream  : String;
-  NameFileInStream  : String;
-  NameFileOutStream : String;
-
-  vStringList : TStringList;
+  Bytes: TBytes;
+  FileStream: TFileStream;
+  Decoder: TBase64Encoding;
 begin
-  vStringList := TStringList.Create;
+  // Inicializa o decodificador Base64
+  Decoder := TBase64Encoding.Create;
+
   try
-    //local onde vai salvar os arquivos antes de salvar no banco
-    DirFileInStream  := GetCurrentDir + '\temp\input\';
-    DirFileOutStream := GetCurrentDir + '\temp\output\';
+    // Converte o texto Base64 em bytes
+    Bytes := Decoder.DecodeStringToBytes(Base64Text);
 
-    //verifica se os diretorios existem, se nao existir, cria
-    if not DirectoryExists(DirFileInStream) then
-      ForceDirectories(DirFileInStream);
-
-    if not DirectoryExists(DirFileOutStream) then
-      ForceDirectories(DirFileOutStream);
-
-    DirFileInStream := DirFileInStream + FormatDateTime('yyyy-mm-dd HH-mm-ss',Now);
-    vStringList.Add(Base64);
-    vStringList.SaveToFile(DirFileInStream);
-    inStream := TFileStream.Create(DirFileInStream, fmOpenRead);
-
+    // Cria um FileStream para salvar o arquivo
+    FileStream := TFileStream.Create(FileName, fmCreate);
     try
-      DirFileOutStream := DirFileOutStream + FormatDateTime('yyyy-mm-dd HH-mm-ss',Now) + ' ' + FileName;
-      outStream := TFileStream.Create(DirFileOutStream, fmCreate);
-      try
-        TNetEncoding.Base64.Decode(inStream, outStream);
-        Result := DirFileOutStream;
-      finally
-        outStream.Free;
-      end;
+      // Escreve os bytes decodificados no arquivo
+      FileStream.WriteBuffer(Bytes[0], Length(Bytes));
     finally
-      inStream.Free;
+      FileStream.Free;
     end;
-
   finally
-    DeleteFile(PChar(DirFileInStream));
-    FreeAndNil(vStringList);
+    Decoder.Free;
   end;
 end;
 
-procedure TfrmPrincipal.btnEnviarClick(Sender: TObject);
+procedure TfrmPrincipal.pnlEnviarArquivoClick(Sender: TObject);
 var
   FArquivo : iArquivo;
 begin
-  Memo1.Lines.Clear;
-  Memo1.Lines.LoadFromFile(GetCurrentDir + '\ConvertBase64ToFile.txt');
+  OpenDialog1.FileName := '';
+  if OpenDialog1.Execute then
+    if OpenDialog1.FileName <> '' then
+    begin
+      FArquivo := TArquivo.New;
+      try
+        FArquivo
+            .nome(ExtractFileName(OpenDialog1.FileName))
+            .arquivo(ConvertFileToBase64(OpenDialog1.FileName))
+          .Insert;
+      finally
 
-  FArquivo := TArquivo.New;
-  try
-    FArquivo
-        .nome('ConvertBase64ToFile.txt')
-        .arquivo(ConvertFileToBase64(GetCurrentDir + '\ConvertBase64ToFile.txt'))
-      .Insert;
-  finally
-
-  end;
+      end;
+    end;
 end;
 
-procedure TfrmPrincipal.btnReceberClick(Sender: TObject);
+procedure TfrmPrincipal.pnlListarArquivosClick(Sender: TObject);
 var
   FArquivo : iArquivo;
-
-  diretorioArq: string;
 begin
-  Memo2.Lines.Clear;
   FArquivo := TArquivo.New;
   try
     //carrega o MemTable com os dados do JSON
@@ -160,24 +141,39 @@ begin
                                .Select);
     FDMemTable1.Open;
     FDMemTable1.First;
-
-    //Converte o arquivo base64
-    if not FDMemTable1.IsEmpty then
-    begin
-      if Trim(FDMemTable1.FieldByName('arquivo').AsString) <> '' then
-      begin
-        diretorioArq := ConvertBase64ToFile(FDMemTable1.FieldByName('arquivo').AsString,
-                                            FDMemTable1.FieldByName('nome').AsString);
-
-        Memo2.Lines.LoadFromFile(diretorioArq);
-      end;
-    end;
   except on E : Exception do
     begin
       raise Exception.Create(E.Message);
       Exit;
     end;
   end;
+end;
+
+procedure TfrmPrincipal.pnlNFCeClick(Sender: TObject);
+var
+  lPathApp,
+  lPathAppSub : string;
+  Base64Text: string;
+  FileName: string;
+begin
+  // Exemplo de texto Base64 (substitua pelo seu próprio texto Base64)
+  Base64Text := FDMemTable1.FieldByName('arquivo').AsString;
+
+  // caminho das pastas gerais
+  lPathApp := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
+
+  // caminho da pasta certificado
+  lPathAppSub := IncludeTrailingPathDelimiter(lPathApp + 'Arquivo');
+
+  ForceDirectories(lPathAppSub);
+
+  // Caminho e nome do arquivo onde será salvo o conteúdo decodificado
+  FileName := lPathAppSub + FDMemTable1.FieldByName('nome').AsString;
+
+  // Chama a função para salvar o arquivo
+  ConvertBase64ToFile(Base64Text, FileName);
+
+  ShowMessage('Arquivo salvo com sucesso em: ' + FileName);
 end;
 
 end.

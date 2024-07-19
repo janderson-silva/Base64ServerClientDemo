@@ -45,6 +45,7 @@ type
 
       function Insert(out erro : String) : iArquivo; overload;
       function Select(out erro : string) : TFDquery; overload;
+      function Delete(out erro : String) : iArquivo; overload;
 
       function &End : iArquivo;
 
@@ -111,7 +112,7 @@ begin
     qry.Connection := Model.Connection.FConnection;
     qry.Active := False;
     qry.sql.Clear;
-    qry.sql.Add('select first 1 * from arquivo');
+    qry.sql.Add('select * from arquivo');
     qry.Active := True;
     erro := '';
     Result := qry;
@@ -119,6 +120,29 @@ begin
     begin
       erro := 'Erro ao consultar Arquivo: ' + ex.Message;
       Result := nil;
+    end;
+  end;
+end;
+
+function TArquivo.Delete(out erro: String): iArquivo;
+var
+  qry : TFDQuery;
+begin
+  try
+    qry := TFDQuery.Create(nil);
+    qry.Connection := Model.Connection.FConnection;
+    qry.Active := False;
+    qry.sql.Clear;
+    qry.sql.Add('delete from arquivo');
+    qry.sql.Add('where 1 = 1');
+    qry.SQL.Add('and id = :id');
+    qry.ParamByName('id').Value := Fid;
+    qry.ExecSQL;
+    qry.Free;
+    erro := '';
+  except on ex:exception do
+    begin
+      erro := 'Erro ao deletar Arquivo: ' + ex.Message;
     end;
   end;
 end;

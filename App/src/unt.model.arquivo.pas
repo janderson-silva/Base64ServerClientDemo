@@ -44,6 +44,7 @@ type
 
       function Insert : iArquivo; overload;
       function Select : String; overload;
+      function Delete : iArquivo; overload;
 
       function &End : iArquivo;
 
@@ -105,6 +106,21 @@ begin
     raise Exception.Create('Status Code: #' + Resp.StatusCode.ToString + #13+#13 + Resp.Content )
   else
     Result := Resp.Content;
+end;
+
+function TArquivo.Delete: iArquivo;
+var
+  Resp : IResponse;
+begin
+  Resp := TRequest.New.BaseURL('http://localhost:9000/v1/')
+              .Resource('arquivo/' + IntToStr(id))
+              .Accept('application/json')
+            .Delete;
+
+  if Resp.StatusCode <> 200 then
+    raise Exception.Create('Status Code: #' + Resp.StatusCode.ToString + #13+#13 + Resp.Content )
+  else
+    Application.MessageBox(PChar('Deletado com sucesso!'),'Atenção',MB_OK+MB_ICONINFORMATION);
 end;
 
 function TArquivo.id (Value : Integer) : iArquivo;

@@ -62,7 +62,7 @@ var
 begin
   try
     try
-      ArqIni := GetCurrentDir + '\ServerUploadArquivo.ini';
+      ArqIni := GetCurrentDir + '\ServerBase64.ini';
 
       // Verifica se INI existe...
       if not FileExists(ArqIni) then

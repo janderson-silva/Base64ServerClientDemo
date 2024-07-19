@@ -71,7 +71,7 @@ var
   Farquivo : iArquivo;
   qry : TFDQuery;
   erro : string;
-  ObjArquivo : TJSONObject;
+  ArrayArquivo : TJSONArray;
 begin
   // Conexao com o banco...
   try
@@ -92,8 +92,8 @@ begin
       begin
         if qry.RecordCount > 0 then
         begin
-          ObjArquivo := qry.ToJSONObject;
-          res.Send<TJSONObject>(ObjArquivo).Status(200);
+          ArrayArquivo := qry.ToJSONArray();
+          res.Send<TJSONArray>(ArrayArquivo).Status(200);
         end
         else
         begin
@@ -111,11 +111,42 @@ begin
   end;
 end;
 
+procedure DeleteArquivo(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  Farquivo : iArquivo;
+  erro : string;
+begin
+  // Conexao com o banco...
+  try
+    Farquivo := TArquivo.New;
+  except
+    res.Send('{ "Erro": "Erro ao conectar com o banco" }').Status(500);
+    exit;
+  end;
+
+  try
+    Farquivo
+        .id(Req.Params['id'].ToInteger)
+      .Delete(erro);
+
+    if erro <> '' then
+      raise Exception.Create(erro)
+    else
+      res.Send('{ deletado com sucesso }').Status(200);
+  except on E : Exception do
+    begin
+      res.Send('{ "erro": "'+E.Message+'" }').Status(400);
+      Exit;
+    end;
+  end;
+end;
+
 procedure Registry;
 begin
     THorse.Group.Prefix('v1')
       .Post('/arquivo', InsertArquivo)
-      .Get('/arquivo', SelecTArquivo);
+      .Get('/arquivo', SelecTArquivo)
+      .Delete('/arquivo/:id', DeleteArquivo);
 end;
 
 end.

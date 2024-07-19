@@ -28,6 +28,7 @@ type
 
     function Insert : iArquivo; overload;
     function Select : String; overload;
+    function Delete : iArquivo; overload;
 
     function &End : iArquivo;
 

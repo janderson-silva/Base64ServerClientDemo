@@ -12,86 +12,127 @@ object frmPrincipal: TfrmPrincipal
   Font.Name = 'Segoe UI'
   Font.Style = []
   TextHeight = 15
-  object Panel1: TPanel
+  object Panel3: TPanel
     Left = 0
     Top = 0
-    Width = 500
-    Height = 438
-    Align = alLeft
+    Width = 1064
+    Height = 41
+    Align = alTop
     BevelOuter = bvNone
+    ParentColor = True
     TabOrder = 0
-    object Panel3: TPanel
-      Left = 0
-      Top = 397
-      Width = 500
-      Height = 41
-      Align = alBottom
+    ExplicitLeft = -3
+    ExplicitTop = -3
+    object pnlListarArquivos: TPanel
+      AlignWithMargins = True
+      Left = 665
+      Top = 3
+      Width = 120
+      Height = 35
+      Cursor = crHandPoint
+      Align = alRight
       BevelOuter = bvNone
+      Caption = 'Listar Arquivo'
+      Color = 5540912
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
       TabOrder = 0
-      ExplicitWidth = 250
-      object btnEnviar: TButton
-        AlignWithMargins = True
-        Left = 3
-        Top = 3
-        Width = 100
-        Height = 35
-        Align = alLeft
-        Caption = 'Enviar Arquivo'
-        TabOrder = 0
-        OnClick = btnEnviarClick
-      end
+      StyleElements = []
+      OnClick = pnlListarArquivosClick
+      ExplicitLeft = 941
     end
-    object Memo1: TMemo
-      Left = 0
-      Top = 0
-      Width = 500
-      Height = 397
-      Align = alClient
-      ScrollBars = ssBoth
+    object pnlEnviarArquivo: TPanel
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 120
+      Height = 35
+      Cursor = crHandPoint
+      Align = alLeft
+      BevelOuter = bvNone
+      Caption = 'Enviar Arquivo'
+      Color = 5540912
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
       TabOrder = 1
+      StyleElements = []
+      OnClick = pnlEnviarArquivoClick
+    end
+    object pnlNFCe: TPanel
+      AlignWithMargins = True
+      Left = 791
+      Top = 3
+      Width = 270
+      Height = 35
+      Cursor = crHandPoint
+      Align = alRight
+      BevelOuter = bvNone
+      Caption = 'Converter Base64 selecionado para File'
+      Color = 16744448
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentBackground = False
+      ParentFont = False
+      TabOrder = 2
+      StyleElements = []
+      OnClick = pnlNFCeClick
+      ExplicitLeft = 801
     end
   end
-  object Panel4: TPanel
-    Left = 564
-    Top = 0
-    Width = 500
-    Height = 438
-    Align = alRight
-    BevelOuter = bvNone
+  object DBGrid1: TDBGrid
+    AlignWithMargins = True
+    Left = 3
+    Top = 91
+    Width = 1058
+    Height = 344
+    Align = alClient
+    DataSource = DataSource1
+    DrawingStyle = gdsClassic
     TabOrder = 1
-    ExplicitLeft = 428
-    object Panel6: TPanel
-      Left = 0
-      Top = 397
-      Width = 500
-      Height = 41
-      Align = alBottom
-      BevelOuter = bvNone
-      TabOrder = 0
-      ExplicitWidth = 250
-      object btnReceber: TButton
-        AlignWithMargins = True
-        Left = 3
-        Top = 3
-        Width = 100
-        Height = 35
-        Align = alLeft
-        Caption = 'Receber Arquivo'
-        TabOrder = 0
-        OnClick = btnReceberClick
-      end
-    end
-    object Memo2: TMemo
-      Left = 0
-      Top = 0
-      Width = 500
-      Height = 397
-      Align = alClient
-      ScrollBars = ssBoth
-      TabOrder = 1
-    end
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -12
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+  end
+  object Panel1: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 44
+    Width = 1058
+    Height = 41
+    Align = alTop
+    BevelInner = bvLowered
+    Caption = 
+      'Para pegar o texto Base64 completo '#233' importante o tipo do Field ' +
+      'do FDMemTable ser WideMemo'
+    Color = clBlack
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -16
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 2
+    ExplicitTop = 394
   end
   object FDMemTable1: TFDMemTable
+    FieldDefs = <>
+    IndexDefs = <>
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
     ResourceOptions.AssignedValues = [rvSilentMode]
@@ -99,7 +140,33 @@ object frmPrincipal: TfrmPrincipal
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 414
-    Top = 48
+    StoreDefs = True
+    Left = 376
+    Top = 144
+    object FDMemTable1id: TIntegerField
+      DisplayLabel = 'C'#243'digo'
+      DisplayWidth = 7
+      FieldName = 'id'
+    end
+    object FDMemTable1nome: TStringField
+      DisplayLabel = 'Nome'
+      DisplayWidth = 45
+      FieldName = 'nome'
+      Size = 250
+    end
+    object FDMemTable1arquivo: TWideMemoField
+      DisplayLabel = 'Base64'
+      FieldName = 'arquivo'
+      BlobType = ftWideMemo
+    end
+  end
+  object DataSource1: TDataSource
+    DataSet = FDMemTable1
+    Left = 376
+    Top = 216
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 376
+    Top = 88
   end
 end

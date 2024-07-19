@@ -33,6 +33,7 @@ type
 
     function Insert(out erro : String) : iArquivo; overload;
     function Select(out erro : string) : TFDquery; overload;
+    function Delete(out erro : String) : iArquivo; overload;
 
     function &End : iArquivo;
 
