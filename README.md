@@ -20,5 +20,19 @@ Este projeto demonstra o tráfego de arquivos em formato Base64 entre um aplicat
 
 **Imagens do Projeto:**
 
-![Imagem do Projeto 1](https://github.com/janderson-silva/ExemploUploadFoto/assets/32645110/d7b269c3-3ee9-492c-ac04-248a6521b75b)
-![Imagem do Projeto 2](https://github.com/janderson-silva/ExemploUploadFoto/assets/32645110/2f1c1dd0-1b02-4140-93a4-2ad83375d4c7)
+<img src="https://github.com/janderson-silva/ExemploUploadFoto/assets/32645110/d7b269c3-3ee9-492c-ac04-248a6521b75b" height="48"/></a>
+<img src="https://github.com/janderson-silva/ExemploUploadFoto/assets/32645110/2f1c1dd0-1b02-4140-93a4-2ad83375d4c7" height="48"/></a>
+
+____________________________________________________________________________________________________________________________________________________________________
+
+#### Linguagem de Programação:
+![Delphi](https://img.shields.io/badge/Delphi_RAD_Studio-B22222?style=for-the-badge&logo=delphi&logoColor=white)
+
+#### Banco de Dados:
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+<img src="https://firebirdsql.org/img/about/logos/firebird-logo-32.png" height="28"/></a>
+
+#### Contatos:
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/janderson-silva-a2ab07b1/)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/janderson.silv/)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/janderson.silva.58)
